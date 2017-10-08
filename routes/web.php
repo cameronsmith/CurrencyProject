@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', 'PagesController@index');
-
+Route::get('/', 'RatesController@index');
 Route::post('/rates', 'RatesController@store');

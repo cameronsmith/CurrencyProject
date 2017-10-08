@@ -16,4 +16,30 @@
         </form>
     </div>
 </section>
+
+@isset($rates)
+    <section class="section">
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Rate</th>
+                    <th>Occurrences</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rates as $rate)
+                        <tr>
+                            <td>{{ $rate->fetched }}</td>
+                            <td>{{ $rate->rate }}</td>
+                            <td>{{ $rate->occurrences }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </section>
+@endisset
+
 @endsection
