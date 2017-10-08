@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Exception;
 use Log;
 use App\Contracts\RatesService;
+use App\Rate;
 
 class RatesController extends Controller
 {
@@ -33,6 +34,14 @@ class RatesController extends Controller
 
         $lastBirthday = $this->getLastBirthday(new Carbon($request->input('dob')));
 
+        $existingRate = Rate::where('fetched', $lastBirthday)->first();
+        if (!is_null($existingRate)) {
+            $existingRate->increment('occurrences');
+            return back()->with(
+                'success_message', 'On '. $lastBirthday->format('Y-m-d') . ' the rate was ' . $existingRate->rate
+            );
+        }
+
         try {
             $rate = $ratesService->getRatesByDate($lastBirthday);
         } catch (Exception $exception) {
@@ -43,6 +52,11 @@ class RatesController extends Controller
 
             return back()->withErrors(['The rates service is currently unavailable.']);
         }
+
+        Rate::create([
+            'rate' => $rate,
+            'fetched' => $lastBirthday
+        ]);
 
         return back()->with('success_message', 'On '. $lastBirthday->format('Y-m-d'). ' the rate was ' . $rate);
     }
