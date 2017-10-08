@@ -21,7 +21,17 @@ class RatesController extends Controller
     }
 
     /**
-     * Get the user's last birthday and return their rate.
+     * Show rates page.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index() {
+        $rates = Rate::orderBy('fetched', 'desc')->get();
+        return view('index', compact('rates'));
+    }
+
+    /**
+     * Get the user's last birthday, save their rate, and return their response.
      *
      * @param Request $request
      * @param RatesService $ratesService
@@ -37,9 +47,7 @@ class RatesController extends Controller
         $existingRate = Rate::where('fetched', $lastBirthday)->first();
         if (!is_null($existingRate)) {
             $existingRate->increment('occurrences');
-            return back()->with(
-                'success_message', 'On '. $lastBirthday->format('Y-m-d') . ' the rate was ' . $existingRate->rate
-            );
+            return $this->getSuccessReturn($lastBirthday, $existingRate->rate);
         }
 
         try {
@@ -58,7 +66,7 @@ class RatesController extends Controller
             'fetched' => $lastBirthday
         ]);
 
-        return back()->with('success_message', 'On '. $lastBirthday->format('Y-m-d'). ' the rate was ' . $rate);
+        return $this->getSuccessReturn($lastBirthday, $rate);
     }
 
     /**
@@ -75,5 +83,17 @@ class RatesController extends Controller
         }
 
         return $birthdayThisYear;
+    }
+
+    /**
+     * Get successful return response.
+     *
+     * @param Carbon $date
+     * @param $rate
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function getSuccessReturn(Carbon $date, $rate) {
+        $date = $date->format('jS F Y');
+        return back()->with('success_message', 'On '. $date. ' the rate was ' . $rate);
     }
 }
