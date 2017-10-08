@@ -9,10 +9,12 @@
 </head>
 <body>
 <header class="section">
+    @include ('errors.list')
+
     <div class="container">
         <h1 class="title">Currency Project by Cameron Smith</h1>
         <h2 class="subtitle">
-            A simple currency project to get the rates based on years.
+            A simple currency project to get the rates based on your previous birthday.
         </h2>
     </div>
 </header>
