@@ -10,6 +10,7 @@
 <body>
 <header class="section">
     @include ('errors.list')
+    @include ('success.show')
 
     <div class="container">
         <h1 class="title">Currency Project by Cameron Smith</h1>
