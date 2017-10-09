@@ -11,7 +11,7 @@ The application uses homestead. Follow these instructions to setup the server.
 6. `php artisan key:generate`
 7. `php artisan migrate`
  
-The site should now be avilable at: `http:\\localhost:8000`
+The site should now be available at: `http://localhost:8000`
 
 
 If you encounter an issue with composer's SSL certificate make sure you have installed the 
